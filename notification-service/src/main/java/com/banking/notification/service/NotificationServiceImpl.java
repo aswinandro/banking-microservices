@@ -121,8 +121,6 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public long getUnreadCount(Long userId) {
-        // An unread notification is one that has not been marked as "READ".
-        // The previous implementation counting "SENT" was incorrect as a SENT notification could be READ.
         return notificationRepository.findUnreadByUserId(userId).size();
     }
 
@@ -134,7 +132,7 @@ public class NotificationServiceImpl implements NotificationService {
         notification.setTitle(title);
         notification.setMessage(message);
         notification.setRecipient(email);
-        
+
         Notification created = createNotification(notification);
         return sendNotification(created.getId());
     }
@@ -147,7 +145,7 @@ public class NotificationServiceImpl implements NotificationService {
         notification.setTitle(title);
         notification.setMessage(message);
         notification.setRecipient(phoneNumber);
-        
+
         Notification created = createNotification(notification);
         return sendNotification(created.getId());
     }
@@ -159,7 +157,7 @@ public class NotificationServiceImpl implements NotificationService {
         notification.setType(NotificationType.PUSH);
         notification.setTitle(title);
         notification.setMessage(message);
-        
+
         Notification created = createNotification(notification);
         return sendNotification(created.getId());
     }
@@ -171,7 +169,22 @@ public class NotificationServiceImpl implements NotificationService {
         notification.setType(NotificationType.IN_APP);
         notification.setTitle(title);
         notification.setMessage(message);
-        
+
         Notification created = createNotification(notification);
         return sendNotification(created.getId());
     }
+
+    // =================== Helper methods ===================
+    private void simulateEmailSending(Notification notification) {
+        System.out.println("Simulating sending EMAIL to " + notification.getRecipient());
+    }
+
+    private void simulateSMSSending(Notification notification) {
+        System.out.println("Simulating sending SMS to " + notification.getRecipient());
+    }
+
+    private void simulatePushNotificationSending(Notification notification) {
+        System.out.println("Simulating sending PUSH notification to user " + notification.getUserId());
+    }
+
+} // end of class
